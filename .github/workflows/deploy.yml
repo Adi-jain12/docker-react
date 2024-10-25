@@ -6,7 +6,6 @@ on:
 
 jobs:
   build:
-    environment: building
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -15,7 +14,7 @@ jobs:
       - run: docker run -e CI=true adydev12/docker-react npm test
 
       - name: Generate deployment package
-        run: zip -r deploy-v1.zip . -x '*.git*'
+        run: zip -r deploy.zip . -x '*.git*'
 
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v21
@@ -27,4 +26,5 @@ jobs:
           existing_bucket_name: elasticbeanstalk-us-east-1-412381737679
           region: us-east-1
           version_label: ${{ github.sha }}
-          deployment_package: deploy-v1.zip
+          deployment_package: deploy.zip
+          use_existing_version_if_available: true
